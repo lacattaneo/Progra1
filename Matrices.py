@@ -9,8 +9,9 @@ def matriz():
 def imprimir_matriz(matriz):
     categorias = len(matriz)
     columnas = len(matriz[0])
-    for f in range (categoria):
-        print("%3d" %matriz[f][c], end=" ")
-        
-matriz()
-print(imprimir_matriz(matriz))
+    for f in range (categorias):
+        for c in range(columnas):
+            print("%3d" %matriz[f][c], end=" ")
+        print()
+m=matriz()
+print(imprimir_matriz(m))
