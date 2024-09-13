@@ -81,3 +81,4 @@ print("\nPromedio de ventas por categoría:")
 for idx, promedio in enumerate(promedios):
     print(f"{categorias[idx]}: {promedio} juegos vendidos en promedio por mes.")
 
+#prueba
