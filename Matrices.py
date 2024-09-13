@@ -36,7 +36,7 @@ def agregar_venta(matriz, cate, mes):
             break
 
         mes_idx = int(input("Seleccione el número del mes (1-12): ")) - 1
-        mes_idx = validacionMeses(mes_idx + 1) - 1  # Ajusta para que devuelva el índice correcto (0-11)
+        mes_idx = validacionMeses(mes_idx + 1) - 1  
 
         cantidad = int(input("Ingrese la cantidad de juegos vendidos: "))
         cantidad = cantidadVentas(cantidad)
@@ -46,21 +46,21 @@ def agregar_venta(matriz, cate, mes):
         print(f"Se ha actualizado la categoría {cate[cat_idx]} para el mes {mes[mes_idx]} con {cantidad} juegos vendidos.")
         print()
 
-# Función para calcular el promedio de ventas por categoría (enfoque básico)
+# Calcular el promedio de ventas por categoría 
 def calcular_promedio(matriz):
     promedios = []
     for fila in matriz:
-        total_ventas = sum(fila)  # Sumar todas las ventas en la fila (categoría)
-        promedio = total_ventas // len(fila)  # Calcular el promedio dividiendo por la cantidad de meses
-        promedios.append(promedio)  # Guardar el promedio en la lista
+        total_ventas = sum(fila)  
+        promedio = total_ventas // len(fila) 
+        promedios.append(promedio) 
     return promedios
 
 # Nueva función para agregar ventas aleatorias usando random
 def agregar_ventas_random(matriz, cate, mes):
-    for i in range(len(cate)):  # Itera sobre cada categoría
-        for j in range(len(mes)):  # Itera sobre cada mes
-            cantidad = random.randint(0, 5)  # Genera una cantidad aleatoria de ventas (0 a 100)
-            matriz[i][j] += cantidad  # Actualiza la matriz
+    for i in range(len(cate)):  
+        for j in range(len(mes)):
+            cantidad = random.randint(0, 5)  
+            matriz[i][j] += cantidad
     print("Ventas aleatorias agregadas exitosamente.")
 
 # Main
@@ -68,7 +68,7 @@ m = matriz()
 categorias = ["Accion", "Aventu", "RolRPG", "Deport", "Carrer", "Estrat", "Simula", "Puzzle", "Terror", "MulMMO"]
 meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
 
-# Llamar a la función para agregar juegos aleatoriamente
+# Agregar juegos
 agregar_venta(m, categorias, meses)
 agregar_ventas_random(m, categorias, meses)
 
