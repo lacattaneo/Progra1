@@ -4,7 +4,7 @@ from modulo import validacionCategoria, validacionMeses, cantidadVentas
 def matriz():  # Función para crear la matriz
     categorias = 10
     meses = 12
-    matriz = [[0]*meses for i in range(categorias)]
+    matriz = [[0]*meses for i in range(categorias)] #lista por comprension
     return matriz
 
 def imprimir_matriz(matriz, cate, mes):  # Función para imprimir la matriz
@@ -46,15 +46,6 @@ def agregar_venta(matriz, cate, mes):
         print(f"Se ha actualizado la categoría {cate[cat_idx]} para el mes {mes[mes_idx]} con {cantidad} juegos vendidos.")
         print()
 
-# Calcular el promedio de ventas por categoría 
-def calcular_promedio(matriz):
-    promedios = []
-    for fila in matriz:
-        total_ventas = sum(fila)  
-        promedio = total_ventas // len(fila) 
-        promedios.append(promedio) 
-    return promedios
-
 # Nueva función para agregar ventas aleatorias usando random
 def agregar_ventas_random(matriz, cate, mes):
     for i in range(len(cate)):  
@@ -63,21 +54,34 @@ def agregar_ventas_random(matriz, cate, mes):
             matriz[i][j] += cantidad
     print("Ventas aleatorias agregadas exitosamente.")
 
-# Main
+# Calcular el promedio de ventas por categoría
+def calcular_promedio(matriz):
+    promedios = []
+    for fila in matriz:
+        total_ventas = sum(fila)
+        promedio = total_ventas // len(fila)
+        promedios.append(promedio)
+    return promedios
+
+def imprimir_promedios(promedios): # Calcular y mostrar el promedio de ventas por categoría
+    #promedios = calcular_promedio(m)
+    print("\nPromedio de ventas por categoría:")
+    for idx, promedio in enumerate(promedios):
+        print(f"{categorias[idx]}: {promedio} juegos vendidos en promedio por mes.")
+
 m = matriz()
 categorias = ["Accion", "Aventu", "RolRPG", "Deport", "Carrer", "Estrat", "Simula", "Puzzle", "Terror", "MulMMO"]
 meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
 
-# Agregar juegos
-agregar_venta(m, categorias, meses)
-agregar_ventas_random(m, categorias, meses)
+def main():
 
-# Imprimir la matriz actualizada
-imprimir_matriz(m, categorias, meses)
+    # Agregar juegos
+    agregar_venta(m, categorias, meses)
+    agregar_ventas_random(m, categorias, meses)
 
-# Calcular y mostrar el promedio de ventas por categoría
-promedios = calcular_promedio(m)
-print("\nPromedio de ventas por categoría:")
-for idx, promedio in enumerate(promedios):
-    print(f"{categorias[idx]}: {promedio} juegos vendidos en promedio por mes.")
+    # Imprimir la matriz actualizada
+    imprimir_matriz(m, categorias, meses)
+    promedios=calcular_promedio(m)
+    imprimir_promedios(promedios)
 
+main()
