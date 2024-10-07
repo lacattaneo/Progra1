@@ -69,10 +69,6 @@ def imprimir_promedios(promedios): # Calcular y mostrar el promedio de ventas po
     for idx, promedio in enumerate(promedios):
         print(f"{categorias[idx]}: {promedio} juegos vendidos en promedio por mes.")
 
-m = matriz()
-categorias = ["Accion", "Aventu", "RolRPG", "Deport", "Carrer", "Estrat", "Simula", "Puzzle", "Terror", "MulMMO"]
-meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
-
 def main():
 
     # Agregar juegos
@@ -83,5 +79,11 @@ def main():
     imprimir_matriz(m, categorias, meses)
     promedios=calcular_promedio(m)
     imprimir_promedios(promedios)
+
+
+m = matriz()
+categorias = ["Accion", "Aventu", "RolRPG", "Deport", "Carrer", "Estrat", "Simula", "Puzzle", "Terror", "MulMMO"]
+meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
+
 
 main()
