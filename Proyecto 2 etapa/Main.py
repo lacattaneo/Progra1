@@ -65,7 +65,6 @@ while not finalizar_programa:
     if menu == 1:
         eleccion_usuario = 'x'
         while not eleccion_usuario.isnumeric() or int(eleccion_usuario) not in range(1, 4):
-            #print("Elige una opción:")
             print('''
             [1] - Crear Usuario
             [2] - Mostrar Usuarios
@@ -74,14 +73,13 @@ while not finalizar_programa:
             eleccion_usuario = input("Elige una opción: ")
         
         if eleccion_usuario == '1':
-            crear_usuario(mi_ruta) # Crear usuario
+            crear_usuario(mi_ruta)  # Crear usuario
         elif eleccion_usuario == '2':         
-            mostrar_usuarios(mi_ruta) # Mostrar usuarios
+            mostrar_usuarios(mi_ruta)  # Mostrar usuarios
         elif eleccion_usuario == '3':
-            #volver_inicio()
-            main()
+            continue  # Volver al menú principal
 
-    elif menu == 2 :
+    elif menu == 2:
         eleccion_usuario = 'x'
         while not eleccion_usuario.isnumeric() or int(eleccion_usuario) not in range(1, 4):
             print('''
@@ -91,27 +89,25 @@ while not finalizar_programa:
             print(' ')
             eleccion_usuario = input("Elige una opción: ")
             
-        if eleccion_usuario == '1':  #Agregar un juego
+        if eleccion_usuario == '1':  # Agregar un juego
             categoria = input("Seleccione la categoría para agregar un juego: ")
             juego = input("Ingrese el nombre del juego: ")
             agregar_juego("datos/juegos.txt", categoria, juego)
-        elif eleccion_usuario == '2':  # Mostrar el catalogo de juegos
+        elif eleccion_usuario == '2':  # Mostrar el catálogo de juegos
             obtener_juegos("datos/juegos.txt")
             mostrar_juegos("datos/juegos.txt")
         elif eleccion_usuario == '3':
-            #volver_inicio()
-            main()
+            continue  # Volver al menú principal
 
     elif menu == 3:
         imprimir_matriz(m, categorias, meses)
-        promedios=calcular_promedio(m)
+        promedios = calcular_promedio(m)
         imprimir_promedios(promedios, categorias)
         volver_inicio()
         
     elif menu == 4:
         eleccion_usuario = 'x'
         while not eleccion_usuario.isnumeric() or int(eleccion_usuario) not in range(1, 4):
-            
             print('''
             [1] - Agregar Ventas
             [2] - Agregar Promociones
@@ -119,17 +115,15 @@ while not finalizar_programa:
             print(' ')
             eleccion_usuario = input("Elige una opción: ")
             
-        if eleccion_usuario == '1':  #Agregar una Venta
+        if eleccion_usuario == '1':  # Agregar una Venta
             agregar_venta(m, categorias, meses)
             volver_inicio()
         elif eleccion_usuario == '2':  # Agregar Promociones
             agregar_promociones(m, categorias, meses)
             volver_inicio()
         elif eleccion_usuario == '3':
-            #volver_inicio()
-            main()
+            continue  # Volver al menú principal
             
     elif menu == 5:
         print("Fin Del Programa, Gracias por Confiar en Nosotros!!")
         finalizar_programa = True
-
