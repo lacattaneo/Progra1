@@ -38,7 +38,7 @@ def mostrar_juegos(ruta_archivo):
     
     print("\nJuegos por categoría:")
     for categoria, lista_juegos in juegos.items():
-        print(f"{categoria}:")
+        print(f"{categoria}:") #faltan agregar los juegos
         for idx, juego in enumerate(lista_juegos, start=1):
             print(f"  {idx}. {juego}")
     

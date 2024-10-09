@@ -1,5 +1,5 @@
 import random
-
+from modulo_validaciones import validacionCategoria, validacionMeses, cantidadVentas
 def agregar_venta(matriz, cate, mes):
     while True:
         print("Categorías disponibles:")

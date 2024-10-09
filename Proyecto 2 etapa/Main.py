@@ -19,7 +19,6 @@ def main():
     
     eleccion_menu = 'x'
     while not eleccion_menu.isnumeric() or int(eleccion_menu) not in range(1, 6):
-        print("Elige una opcion:")
         print('''
         [1] - Usuarios
         [2] - Catalogo de Juegos
@@ -27,7 +26,9 @@ def main():
         [4] - Agregar Ventas
         [5] - Salir del programa''')
         print(' ')
-        eleccion_menu = input()
+        eleccion_menu = input("Elige una opcion: ")
+        print(' ')
+        
 
     return int(eleccion_menu)
 
@@ -64,31 +65,31 @@ while not finalizar_programa:
     if menu == 1:
         eleccion_usuario = 'x'
         while not eleccion_usuario.isnumeric() or int(eleccion_usuario) not in range(1, 4):
-            print("Elige una opción:")
+            #print("Elige una opción:")
             print('''
             [1] - Crear Usuario
             [2] - Mostrar Usuarios
             [3] - Volver al Menu Principal''')
             print(' ')
-            eleccion_usuario = input()
+            eleccion_usuario = input("Elige una opción: ")
         
         if eleccion_usuario == '1':
             crear_usuario(mi_ruta) # Crear usuario
         elif eleccion_usuario == '2':         
             mostrar_usuarios(mi_ruta) # Mostrar usuarios
         elif eleccion_usuario == '3':
-            volver_inicio()
-            
+            #volver_inicio()
+            main()
+
     elif menu == 2 :
         eleccion_usuario = 'x'
         while not eleccion_usuario.isnumeric() or int(eleccion_usuario) not in range(1, 4):
-            print("Elige una opción:")
             print('''
             [1] - Agregar Juego
             [2] - Mostrar Catalogo
             [3] - Volver al Menu Principal''')
             print(' ')
-            eleccion_usuario = input()
+            eleccion_usuario = input("Elige una opción: ")
             
         if eleccion_usuario == '1':  #Agregar un juego
             categoria = input("Seleccione la categoría para agregar un juego: ")
@@ -98,8 +99,9 @@ while not finalizar_programa:
             obtener_juegos("datos/juegos.txt")
             mostrar_juegos("datos/juegos.txt")
         elif eleccion_usuario == '3':
-            volver_inicio()
-        
+            #volver_inicio()
+            main()
+
     elif menu == 3:
         imprimir_matriz(m, categorias, meses)
         promedios=calcular_promedio(m)
@@ -109,13 +111,13 @@ while not finalizar_programa:
     elif menu == 4:
         eleccion_usuario = 'x'
         while not eleccion_usuario.isnumeric() or int(eleccion_usuario) not in range(1, 4):
-            print("Elige una opción:")
+            
             print('''
             [1] - Agregar Ventas
             [2] - Agregar Promociones
             [3] - Volver al Menu Principal''')
             print(' ')
-            eleccion_usuario = input()
+            eleccion_usuario = input("Elige una opción: ")
             
         if eleccion_usuario == '1':  #Agregar una Venta
             agregar_venta(m, categorias, meses)
@@ -124,7 +126,8 @@ while not finalizar_programa:
             agregar_promociones(m, categorias, meses)
             volver_inicio()
         elif eleccion_usuario == '3':
-            volver_inicio()
+            #volver_inicio()
+            main()
             
     elif menu == 5:
         print("Fin Del Programa, Gracias por Confiar en Nosotros!!")
