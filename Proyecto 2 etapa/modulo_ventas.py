@@ -47,3 +47,25 @@ def agregar_promociones(matriz, cate, mes):
         print("Detalles de las promociones:")
         for detalle in detalles_promociones:
             print(detalle)
+            
+def guardar_matriz(matriz, categorias, meses):
+    mi_ruta= "datos/"
+    nombre_archivo = mi_ruta + "matriz.txt"
+    
+    try:
+        with open(nombre_archivo, 'w') as archivo:
+            # Escribir la primera fila (encabezado con los meses)
+            encabezado = "\t".join(meses)
+            archivo.write("Categoría/Mes\t" + encabezado + "\n")
+            
+            # Escribir cada fila de la matriz
+            for i, categoria in enumerate(categorias):
+                ventas = "\t".join(map(str, matriz[i]))  # Convertir cada valor a string
+                archivo.write(f"{categoria}\t{ventas}\n")
+
+        print(f"Matriz guardada correctamente en '{nombre_archivo}'.")
+
+    except FileNotFoundError:
+        print(f"No se encontró el archivo para guardar la matriz.")
+    except Exception as e:
+        print(f"Error al guardar la matriz: {e}")

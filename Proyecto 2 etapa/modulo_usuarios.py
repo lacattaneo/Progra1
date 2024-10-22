@@ -15,6 +15,7 @@ def crear_usuario(ruta_archivo):
 
     except FileNotFoundError:
         # Si el archivo no existe, no hay números existentes
+        print("no se encuentra el archivo")
         pass
     
     while True:
