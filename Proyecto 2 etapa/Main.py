@@ -1,7 +1,7 @@
 from modulo_validaciones import validacionCategoria, validacionMeses, cantidadVentas
-from modulo_estadisticas import calcular_promedio, imprimir_promedios, imprimir_matriz_de_archivo
+from modulo_estadisticas import calcular_promedio, imprimir_promedios, imprimir_matriz_de_archivo, guardar_promedios
 from modulo_usuarios import crear_usuario, mostrar_usuarios
-from modulo_ventas import agregar_venta, agregar_promociones, guardar_matriz
+from modulo_ventas import agregar_venta, agregar_promociones, guardar_matriz, guardar_calendario
 from modulo_juegos import obtener_juegos, agregar_juego, mostrar_juegos
 
 
@@ -42,29 +42,29 @@ def volver_inicio():
 
 def crear_calendario(anio):
     dias_por_mes = {
-        "Enero": list(range(1, 32)),
-        "Febrero": list(range(1, 30)) if es_bisiesto(anio) else list(range(1, 29)),
-        "Marzo": list(range(1, 32)),
-        "Abril": list(range(1, 31)),
-        "Mayo": list(range(1, 32)),
-        "Junio": list(range(1, 31)),
-        "Julio": list(range(1, 32)),
-        "Agosto": list(range(1, 32)),
-        "Septiembre": list(range(1, 31)),
-        "Octubre": list(range(1, 32)),
-        "Noviembre": list(range(1, 31)),
-        "Diciembre": list(range(1, 32))
+        "Enero": {dia: 0 for dia in range(1, 32)},
+        "Febrero": {dia: 0 for dia in (range(1, 30) if es_bisiesto(anio) else range(1, 29))},
+        "Marzo": {dia: 0 for dia in range(1, 32)},
+        "Abril": {dia: 0 for dia in range(1, 31)},
+        "Mayo": {dia: 0 for dia in range(1, 32)},
+        "Junio": {dia: 0 for dia in range(1, 31)},
+        "Julio": {dia: 0 for dia in range(1, 32)},
+        "Agosto": {dia: 0 for dia in range(1, 32)},
+        "Septiembre": {dia: 0 for dia in range(1, 31)},
+        "Octubre": {dia: 0 for dia in range(1, 32)},
+        "Noviembre": {dia: 0 for dia in range(1, 31)},
+        "Diciembre": {dia: 0 for dia in range(1, 32)}
     }
     return dias_por_mes
 
-# Verificar si el año es bisiesto
+
 def es_bisiesto(anio):
     return (anio % 4 == 0 and anio % 100 != 0) or (anio % 400 == 0)
 
 m = matriz()
 categorias = ["Accion", "Aventu", "RolRPG", "Deport", "Carrer", "Estrat", "Simula", "Puzzle", "Terror", "MulMMO"]
 meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
-anio = 2024  # Año bisiesto
+anio = 2024  
 calendario = crear_calendario(anio)
 
 
@@ -113,6 +113,7 @@ while not finalizar_programa:
         imprimir_matriz_de_archivo(mi_ruta)
         promedios = calcular_promedio(mi_ruta)
         imprimir_promedios(promedios, categorias)
+        guardar_promedios(mi_ruta, categorias, promedios)
         volver_inicio()
         
     elif menu == 4:
@@ -126,8 +127,9 @@ while not finalizar_programa:
             eleccion_usuario = input("Elige una opción: ")
             
         if eleccion_usuario == '1':  # Agregar una Venta
-            agregar_venta(m, categorias, meses)
+            agregar_venta(m, categorias, meses, calendario)
             guardar_matriz(m, categorias, meses)  # Guardar la matriz cada vez que se agregan ventas
+            guardar_calendario(mi_ruta, calendario)
             volver_inicio()
         elif eleccion_usuario == '2':  # Agregar Promociones
             agregar_promociones(m, categorias, meses)

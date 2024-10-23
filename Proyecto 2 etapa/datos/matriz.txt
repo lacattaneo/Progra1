@@ -1,6 +1,6 @@
 Categoría/Mes	ENE	FEB	MAR	ABR	MAY	JUN	JUL	AGO	SEP	OCT	NOV	DIC
 Accion	1	0	0	0	0	0	0	0	0	0	0	0
-Aventu	0	0	0	0	0	0	0	0	0	0	0	0
+Aventu	1	0	0	0	0	0	0	0	0	0	0	0
 RolRPG	0	0	0	0	0	0	0	0	0	0	0	0
 Deport	0	0	0	0	0	0	0	0	0	0	0	0
 Carrer	0	0	0	0	0	0	0	0	0	0	0	0
