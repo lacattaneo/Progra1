@@ -4,7 +4,6 @@ import os
 CATEGORIAS = ("Accion", "Aventu", "RolRPG", "Deport", "Carrer", "Estrat", "Simula", "Puzzle", "Terror", "MulMMO")
 
 def obtener_juegos(ruta_archivo):
-    """Lee los juegos del archivo y devuelve un diccionario de juegos por categoría."""
     juegos = {categoria: [] for categoria in CATEGORIAS}  # Crear un diccionario para almacenar los juegos
     try:
         with open(ruta_archivo, 'r') as archivo:

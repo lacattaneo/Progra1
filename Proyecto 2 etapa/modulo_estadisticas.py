@@ -1,6 +1,6 @@
 
 def leer_matriz(ruta_archivo):
-    nombre_archivo = ruta_archivo + "matriz.txt"
+    nombre_archivo = ruta_archivo + "ventas_mes.txt"
     matriz = []
     try:
         with open(nombre_archivo, 'r') as archivo:
@@ -31,28 +31,39 @@ def calcular_promedio_recursivo(matriz, promedios):
     fila = matriz[0]
     total_ventas = sum(fila)
     promedio = total_ventas / len(fila) if len(fila) > 0 else 0
-    promedios.append(f"{promedio:.2f}")
+    promedios.append(promedio)  # Guarda el promedio como un número
     return calcular_promedio_recursivo(matriz[1:], promedios)
+
 
 def calcular_promedio(ruta_archivo):
     matriz = leer_matriz(ruta_archivo)
     promedios = calcular_promedio_recursivo(matriz, [])
+    print(f"Promedios calculados: {promedios}")  # Imprime los promedios
     return promedios
 
-def imprimir_promedios_recursivo(categorias, promedios):
-    if not categorias:
+
+def imprimir_promedios(promedios, categorias):
+    if not promedios or not categorias:
+        print("No hay datos para imprimir los promedios.")
         return
-    print(f"{categorias[0]}: {promedios[0]} juegos vendidos en promedio.")
-    return imprimir_promedios_recursivo(categorias[1:], promedios[1:])
+    print("\nPromedios de Ventas por Categoría:")
+    imprimir_promedios_recursivo(categorias, promedios)
+
 
 def imprimir_promedios(promedios, categorias):
     print("\nPromedios de Ventas por Categoría:")
     imprimir_promedios_recursivo(categorias, promedios)
 
-def guardar_promedios_recursivo(archivo, categorias, promedios):
-    if not categorias:
+def imprimir_promedios_recursivo(categorias, promedios):
+    if not categorias or not promedios:
         return
-    archivo.write(f"{categorias[0]}\t{promedios[0]} juegos vendidos en promedio.\n")
+    print(f"{categorias[0]}: {promedios[0]:.2f} juegos vendidos en promedio.")  # Formato con dos decimales
+    return imprimir_promedios_recursivo(categorias[1:], promedios[1:])
+
+def guardar_promedios_recursivo(archivo, categorias, promedios):
+    if not categorias or not promedios:
+        return
+    archivo.write(f"{categorias[0]}\t{promedios[0]:.2f} juegos vendidos en promedio.\n")
     return guardar_promedios_recursivo(archivo, categorias[1:], promedios[1:])
 
 def guardar_promedios(ruta_archivo, categorias, promedios):
@@ -65,8 +76,9 @@ def guardar_promedios(ruta_archivo, categorias, promedios):
     except Exception as e:
         print(f"Error al guardar los promedios: {e}")
 
+
 def imprimir_matriz_de_archivo(ruta_archivo):
-    nombre_archivo = ruta_archivo + "matriz.txt"
+    nombre_archivo = ruta_archivo + "ventas_mes.txt"
     try:
         with open(nombre_archivo, 'r') as archivo:
             # Leer la primera línea para obtener los meses
@@ -94,6 +106,6 @@ def imprimir_matriz_de_archivo(ruta_archivo):
                 print()
 
     except FileNotFoundError:
-        print(f"No se encontró el archivo: {nombre_archivo}.")
+        print(f"No se encontró el archivo: {nombre_archivo}")
     except Exception as e:
         print(f"Error al leer el archivo: {e}")

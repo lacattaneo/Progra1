@@ -73,7 +73,7 @@ def agregar_promociones(matriz, cate, mes):
 
 def guardar_matriz(matriz, categorias, meses):
     mi_ruta = "datos/"
-    nombre_archivo = mi_ruta + "matriz.txt"
+    nombre_archivo = mi_ruta + "ventas_mes.txt"
     
     try:
         with open(nombre_archivo, 'w') as archivo:  # Cambiar a modo de escritura para sobrescribir
