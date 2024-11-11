@@ -1,5 +1,5 @@
 Categoría	Promedio de Ventas
-Accion	0.08 juegos vendidos en promedio.
+Accion	0.75 juegos vendidos en promedio.
 Aventu	0.00 juegos vendidos en promedio.
 RolRPG	0.00 juegos vendidos en promedio.
 Deport	0.00 juegos vendidos en promedio.
