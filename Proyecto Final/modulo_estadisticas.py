@@ -1,6 +1,5 @@
-
 def leer_matriz(ruta_archivo):
-    nombre_archivo = ruta_archivo + "ventas_mes.txt"
+    nombre_archivo = ruta_archivo + "ventas_mes.csv"
     matriz = []
     try:
         with open(nombre_archivo, 'r') as archivo:
@@ -12,73 +11,57 @@ def leer_matriz(ruta_archivo):
                     continue
                 # Convertir la línea en una lista de enteros usando tabulaciones
                 try:
-                    # Usar tabulaciones como delimitador
                     fila = list(map(int, linea.split("\t")[1:]))  # Ignorar la categoría (primer elemento)
                     matriz.append(fila)
                 except ValueError:
                     print(f"Línea no válida ignorada: {linea}")  # Informar sobre líneas no válidas
     except FileNotFoundError:
         print("No se encontró el archivo de la matriz.")
-    except Exception as e:
-        print(f"Error al leer la matriz: {e}")
+    except IOError:
+        print("Error al intentar leer el archivo. Por favor, verifica los permisos.")
     
     return matriz
 
-# Función para calcular los promedios de ventas
-def calcular_promedio_recursivo(matriz, promedios):
-    if not matriz:
-        return promedios
-    fila = matriz[0]
-    total_ventas = sum(fila)
-    promedio = total_ventas / len(fila) if len(fila) > 0 else 0
-    promedios.append(promedio)  # Guarda el promedio como un número
-    return calcular_promedio_recursivo(matriz[1:], promedios)
-
-
+# Función para llamar a la recursividad
 def calcular_promedio(ruta_archivo):
     matriz = leer_matriz(ruta_archivo)
-    promedios = calcular_promedio_recursivo(matriz, [])
-    print(f"Promedios calculados: {promedios}")  # Imprime los promedios
+    promedios = calcular_promedio_recursivo(matriz)
+    print(f"Promedios calculados: {promedios}")
     return promedios
 
+# Función recursiva que calcula los promedios
+def calcular_promedio_recursivo(matriz):
+    promedios = []
+    for fila in matriz:
+        if fila:
+            promedio = sum(fila) / len(fila)
+        else:
+            promedio = 0
+        promedios.append(promedio)
+    return promedios
 
 def imprimir_promedios(promedios, categorias):
     if not promedios or not categorias:
         print("No hay datos para imprimir los promedios.")
         return
     print("\nPromedios de Ventas por Categoría:")
-    imprimir_promedios_recursivo(categorias, promedios)
-
-
-def imprimir_promedios(promedios, categorias):
-    print("\nPromedios de Ventas por Categoría:")
-    imprimir_promedios_recursivo(categorias, promedios)
-
-def imprimir_promedios_recursivo(categorias, promedios):
-    if not categorias or not promedios:
-        return
-    print(f"{categorias[0]}: {promedios[0]:.2f} juegos vendidos en promedio.")  # Formato con dos decimales
-    return imprimir_promedios_recursivo(categorias[1:], promedios[1:])
-
-def guardar_promedios_recursivo(archivo, categorias, promedios):
-    if not categorias or not promedios:
-        return
-    archivo.write(f"{categorias[0]}\t{promedios[0]:.2f} juegos vendidos en promedio.\n")
-    return guardar_promedios_recursivo(archivo, categorias[1:], promedios[1:])
+    for i in range(len(categorias)):
+        print(f"{categorias[i]}: {promedios[i]:.2f} juegos vendidos en promedio Anual.")
 
 def guardar_promedios(ruta_archivo, categorias, promedios):
-    nombre_archivo = ruta_archivo + "estadisticas.txt"
+    nombre_archivo = ruta_archivo + "promedio_anual.txt"
     try:
         with open(nombre_archivo, 'w') as archivo:
             archivo.write("Categoría\tPromedio de Ventas\n")
-            guardar_promedios_recursivo(archivo, categorias, promedios)
+            for i in range(len(categorias)):
+                archivo.write(f"{categorias[i]}\t{promedios[i]:.2f} juegos vendidos en promedio.\n")
         print(f"Promedios guardados exitosamente en {nombre_archivo}.")
-    except Exception as e:
-        print(f"Error al guardar los promedios: {e}")
+    except IOError:
+        print("Error al guardar el archivo. Por favor, verifica los permisos.")
 
-
+# Función para imprimir la matriz de ventas desde el archivo
 def imprimir_matriz_de_archivo(ruta_archivo):
-    nombre_archivo = ruta_archivo + "ventas_mes.txt"
+    nombre_archivo = ruta_archivo + "ventas_mes.csv"
     try:
         with open(nombre_archivo, 'r') as archivo:
             # Leer la primera línea para obtener los meses
@@ -95,7 +78,6 @@ def imprimir_matriz_de_archivo(ruta_archivo):
                 linea = linea.strip()
                 if not linea:  # Si la línea está vacía, se omite
                     continue
-                
                 partes = linea.split("\t")  # Dividir la línea por tabulaciones
                 categoria = partes[0]  # Primera columna es la categoría
                 ventas = partes[1:]  # El resto son las ventas
@@ -107,5 +89,5 @@ def imprimir_matriz_de_archivo(ruta_archivo):
 
     except FileNotFoundError:
         print(f"No se encontró el archivo: {nombre_archivo}")
-    except Exception as e:
-        print(f"Error al leer el archivo: {e}")
+    except IOError:
+        print("Error al intentar leer el archivo. Por favor, verifica los permisos.")

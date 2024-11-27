@@ -5,13 +5,8 @@ def validacionCategoria(categoria):# Valida que la categoría esté entre 0 y 10
             return categoria  # Salir si se ingresa 0
     return categoria
 
-def validacionMeses(mes):# Valida que el mes esté entre 1 y 12
-    while not (1 <= mes <= 12):  
-        mes = int(input("Ingrese un número válido entre 1 y 12: "))
-    return mes
+# Validación de mes (entre 1 y 12)
+validacionMeses = lambda mes: mes if (1 <= mes <= 12) else int(input("Ingrese un número válido entre 1 y 12: "))
 
-def cantidadVentas(cantidad):# Valida que la cantidad sea mayor o igual a 0
-    while cantidad < 0:  
-        cantidad = int(input("Ingrese una cantidad mayor o igual a 0: "))
-    return cantidad
-
+# Validación de cantidad (mayor o igual a 0)
+cantidadVentas = lambda cantidad: cantidad if cantidad >= 0 else int(input("Ingrese una cantidad mayor o igual a 0: "))
