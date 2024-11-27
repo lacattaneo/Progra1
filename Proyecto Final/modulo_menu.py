@@ -1,6 +1,6 @@
 from modulo_estadisticas import calcular_promedio, imprimir_promedios, imprimir_matriz_de_archivo, guardar_promedios
 from modulo_usuarios import crear_usuario, mostrar_usuarios
-from modulo_ventas import agregar_venta, agregar_promociones, guardar_matriz, guardar_calendario
+from modulo_ventas import agregar_venta, guardar_matriz, guardar_calendario
 from modulo_juegos import obtener_juegos, agregar_juego, mostrar_juegos
 
 
@@ -78,11 +78,10 @@ def menu(matriz_ventas, categorias_juegos, meses_del_anio, calendario_ventas):
             
         elif menu == 4:
             eleccion_usuario = 'x'
-            while not eleccion_usuario.isnumeric() or int(eleccion_usuario) not in range(1, 4):
+            while not eleccion_usuario.isnumeric() or int(eleccion_usuario) not in range(1, 3):
                 print('''
                 [1] - Agregar Ventas
-                [2] - Agregar Promociones
-                [3] - Volver al Menu Principal''')
+                [2] - Volver al Menu Principal''')
                 print(' ')
                 eleccion_usuario = input("Elige una opción: ")
                 
@@ -91,11 +90,7 @@ def menu(matriz_ventas, categorias_juegos, meses_del_anio, calendario_ventas):
                 guardar_matriz(matriz_ventas, categorias_juegos, meses_del_anio)  # Guardar la matriz cada vez que se agregan ventas
                 guardar_calendario(mi_ruta, calendario_ventas)
                 volver_inicio()
-            elif eleccion_usuario == '2':  # Agregar Promociones
-                agregar_promociones(matriz_ventas, categorias_juegos, meses_del_anio)
-                guardar_matriz(matriz_ventas, categorias_juegos, meses_del_anio)
-                volver_inicio()
-            elif eleccion_usuario == '3':
+            elif eleccion_usuario == '2':
                 continue  # Volver al menú principal
                 
         elif menu == 5:

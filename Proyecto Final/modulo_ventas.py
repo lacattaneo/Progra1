@@ -41,72 +41,40 @@ def agregar_venta(matriz, cate, mes, calendario):
         # Selección y validación de la cantidad de juegos vendidos
         cantidad = cantidadVentas(int(input("Ingrese la cantidad de juegos vendidos: ")))
 
-        # Actualizar la matriz con la cantidad ingresada
+        # Actualizar la matriz de ventas mensuales con la cantidad ingresada
         matriz[cat_idx][mes_idx] += cantidad
         
-        # Actualizar el calendario utilizando la nueva función
+        # Actualizar el calendario de ventas diarias
         actualizar_ventas(calendario, mes_seleccionado, dia, cantidad)
+        
+        # Guardar ambos archivos
+        guardar_matriz(matriz, cate, mes)  # Guardar en ventas_mes.csv
+        guardar_calendario("datos/", calendario)  # Guardar en ventas_diarias.csv
         
         print(f"Se ha actualizado la categoría {cate[cat_idx]} para el mes {mes[mes_idx]} y día {dia} con {cantidad} juegos vendidos.")
         print()
 
-def agregar_promociones(matriz, cate, mes):
-    promocion = 0
-    detalles_promociones = []  # Lista para almacenar detalles de cada promoción
-    
-    for i in range(len(cate)):  
-        for j in range(len(mes)):
-            cantidad = random.randint(0, 2)  # Genera un número aleatorio de 0 a 2
-            matriz[i][j] += cantidad  # Sumar las promociones a la matriz
-            
-            if cantidad > 0:
-                promocion += 1
-                detalles_promociones.append(f"{cate[i]}: {cantidad} promociones en {mes[j]}")
-    
-    print(f"\nSe realizaron {promocion} promociones.")
-    
-    # Imprimir los detalles de cada promoción
-    if detalles_promociones:
-        print("Detalles de las promociones:")
-        for detalle in detalles_promociones:
-            print(detalle)
-
-def guardar_matriz(matriz, categorias, meses):
+def guardar_matriz(matriz, categorias, mes):
     mi_ruta = "datos/"
     nombre_archivo = mi_ruta + "ventas_mes.csv"
-    
-    # Verifica si el directorio existe, si no, lo crea
-    if not os.path.exists(mi_ruta):
-        os.makedirs(mi_ruta)
 
     try:
-        with open(nombre_archivo, 'w') as archivo:  # Sobrescribir archivo
-            # Escribir el encabezado manualmente
-            archivo.write("Categoría/Mes\t")
-            for mes_nombre in meses:
-                archivo.write(f"{mes_nombre}\t")
-            archivo.write("\n")  # Fin de encabezado
-
-            # Escribir cada fila de la matriz
+        # Abrir el archivo en modo de añadir ('a')
+        with open(nombre_archivo, 'a') as archivo:
+            # Escribir las filas de la matriz al final del archivo
             for i in range(len(categorias)):
-                archivo.write(f"{categorias[i]}\t")
-                for j in range(len(meses)):
-                    archivo.write(f"{matriz[i][j]}\t")
-                archivo.write("\n")
+                archivo.write(f"{categorias[i]}\t" + "\t".join(map(str, matriz[i])) + "\n")
 
         print(f"Matriz guardada correctamente en '{nombre_archivo}'.")
+    
     except FileNotFoundError:
-        print(f"No se encontró el archivo para guardar la matriz.")
+        print(f"Error: No se encontró el archivo o el directorio '{mi_ruta}'. Verifica que exista.")
     except IOError:
-        print("Error al intentar guardar la matriz. Por favor, verifica los permisos.")
+        print("Error al intentar guardar la matriz. Por favor, verifica los permisos o la ruta.")
+
 
 def guardar_calendario(ruta_archivo, calendario):
     nombre_archivo = ruta_archivo + "ventas_diarias.csv"
-    
-    # Verifica si el directorio existe, si no, lo crea
-    if not os.path.exists(ruta_archivo):
-        os.makedirs(ruta_archivo)
-    
     try:
         with open(nombre_archivo, 'a') as archivo:  # Abrir en modo 'a' para agregar
             # Escribir el encabezado solo si el archivo está vacío
@@ -137,19 +105,28 @@ def actualizar_ventas(calendario, mes, dia, cantidad):
     print(f"Nuevas ventas registradas para {mes} {dia}: {calendario[mes][dia]}")
 
 def cargar_matriz(categorias, meses):
-    nombre_archivo = "ventas_mes.csv"
-    matriz = [[0] * len(meses) for _ in range(len(categorias))]
-    
+    mi_ruta = "datos/"
+    nombre_archivo = mi_ruta + "ventas_mes.csv"
+    matriz = [[0] * len(meses) for _ in range(len(categorias))]  # Inicializa la matriz con las dimensiones correctas
+
     try:
         with open(nombre_archivo, 'r') as archivo:
             lines = archivo.readlines()
+            
+            # Verifica si hay líneas después del encabezado
             for i, line in enumerate(lines[1:]):  # Saltamos el encabezado
-                values = line.strip().split("\t")[1:]  # Evitar la columna de categorías
-                matriz[i] = list(map(int, values))
+                # Evita que el índice se salga del rango
+                if i < len(categorias):
+                    values = line.strip().split("\t")[1:]  # Evitar la columna de categorías
+                    # Asignar los valores de las ventas, convirtiendo a int
+                    matriz[i] = [int(x) for x in values]
+                else:
+                    print(f"Advertencia: Línea extra en el archivo {nombre_archivo} en la posición {i+1}, no se asignará.")
+            
         print(f"Matriz cargada correctamente desde '{nombre_archivo}'.")
     except FileNotFoundError:
         print(f"Archivo no encontrado. Inicializando la matriz con valores por defecto.")
-    except Exception as e:
-        print(f"Error al cargar la matriz: {e}")
+    except IOError:
+        print("Error al cargar la matriz")
     
     return matriz

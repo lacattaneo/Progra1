@@ -26,8 +26,13 @@ def leer_matriz(ruta_archivo):
 def calcular_promedio(ruta_archivo):
     matriz = leer_matriz(ruta_archivo)
     promedios = calcular_promedio_recursivo(matriz)
-    print(f"Promedios calculados: {promedios}")
-    return promedios
+    
+    # Formatear los promedios a dos decimales
+    promedios_formateados = [f"{promedio:.2f}" for promedio in promedios]
+    
+    print(f"Promedios calculados: {promedios_formateados}")
+    return promedios_formateados
+
 
 # Función recursiva que calcula los promedios
 def calcular_promedio_recursivo(matriz):
@@ -46,7 +51,12 @@ def imprimir_promedios(promedios, categorias):
         return
     print("\nPromedios de Ventas por Categoría:")
     for i in range(len(categorias)):
-        print(f"{categorias[i]}: {promedios[i]:.2f} juegos vendidos en promedio Anual.")
+        try:
+            promedio = float(promedios[i])  # Convertir a float antes de formatear
+            print(f"{categorias[i]}: {promedio:.2f} juegos vendidos en promedio Anual.")
+        except ValueError:
+            print(f"Error: El valor '{promedios[i]}' no es un número válido.")
+
 
 def guardar_promedios(ruta_archivo, categorias, promedios):
     nombre_archivo = ruta_archivo + "promedio_anual.txt"
@@ -54,10 +64,15 @@ def guardar_promedios(ruta_archivo, categorias, promedios):
         with open(nombre_archivo, 'w') as archivo:
             archivo.write("Categoría\tPromedio de Ventas\n")
             for i in range(len(categorias)):
-                archivo.write(f"{categorias[i]}\t{promedios[i]:.2f} juegos vendidos en promedio.\n")
+                try:
+                    promedio = float(promedios[i])  # Convertir a float antes de formatear
+                    archivo.write(f"{categorias[i]}\t{promedio:.2f} juegos vendidos en promedio.\n")
+                except ValueError:
+                    archivo.write(f"{categorias[i]}\tError: Valor no válido\n")
         print(f"Promedios guardados exitosamente en {nombre_archivo}.")
     except IOError:
         print("Error al guardar el archivo. Por favor, verifica los permisos.")
+
 
 # Función para imprimir la matriz de ventas desde el archivo
 def imprimir_matriz_de_archivo(ruta_archivo):
@@ -91,3 +106,4 @@ def imprimir_matriz_de_archivo(ruta_archivo):
         print(f"No se encontró el archivo: {nombre_archivo}")
     except IOError:
         print("Error al intentar leer el archivo. Por favor, verifica los permisos.")
+
