@@ -1,4 +1,3 @@
-import random
 from modulo_validaciones import validacionCategoria, validacionMeses, cantidadVentas
 import os
 
@@ -59,18 +58,40 @@ def guardar_matriz(matriz, categorias, mes):
     nombre_archivo = mi_ruta + "ventas_mes.csv"
 
     try:
-        # Abrir el archivo en modo de añadir ('a')
-        with open(nombre_archivo, 'a') as archivo:
-            # Escribir las filas de la matriz al final del archivo
-            for i in range(len(categorias)):
-                archivo.write(f"{categorias[i]}\t" + "\t".join(map(str, matriz[i])) + "\n")
+        # Leer el archivo existente
+        datos_existentes = {}
+        try:
+            with open(nombre_archivo, 'r') as archivo:
+                for linea in archivo:
+                    partes = linea.strip().split("\t")
+                    archivo_mes = partes[0]
+                    categoria = partes[1]
+                    try:
+                        valores = list(map(int, partes[2:]))
+                        if archivo_mes not in datos_existentes:
+                            datos_existentes[archivo_mes] = {}
+                        datos_existentes[archivo_mes][categoria] = valores
+                    except ValueError:
+                        print(f"Advertencia: Se ignoró una línea no numérica: {linea}")
+        except FileNotFoundError:
+            print(f"Archivo no encontrado. Se creará un nuevo archivo en '{nombre_archivo}'.")
 
-        print(f"Matriz guardada correctamente en '{nombre_archivo}'.")
-    
-    except FileNotFoundError:
-        print(f"Error: No se encontró el archivo o el directorio '{mi_ruta}'. Verifica que exista.")
-    except IOError:
-        print("Error al intentar guardar la matriz. Por favor, verifica los permisos o la ruta.")
+        # Actualizar los datos existentes con los nuevos datos
+        if mes not in datos_existentes:
+            datos_existentes[mes] = {}
+        for i in range(len(categorias)):
+            datos_existentes[mes][categorias[i]] = matriz[i]
+
+        # Escribir los datos actualizados en el archivo
+        with open(nombre_archivo, 'w') as archivo:
+            for archivo_mes, categorias_data in datos_existentes.items():
+                for categoria, valores in categorias_data.items():
+                    archivo.write(f"{archivo_mes}\t{categoria}\t" + "\t".join(map(str, valores)) + "\n")
+
+        print(f"Matriz actualizada correctamente en '{nombre_archivo}'.")
+
+    except Exception as e:
+        print(f"Se produjo un error: {e}")
 
 
 def guardar_calendario(ruta_archivo, calendario):

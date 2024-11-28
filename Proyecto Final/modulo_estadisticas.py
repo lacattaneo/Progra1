@@ -49,6 +49,11 @@ def imprimir_promedios(promedios, categorias):
     if not promedios or not categorias:
         print("No hay datos para imprimir los promedios.")
         return
+
+    if len(promedios) != len(categorias):
+        print("Error: Las listas de promedios y categorías no tienen la misma longitud.")
+        return
+
     print("\nPromedios de Ventas por Categoría:")
     for i in range(len(categorias)):
         try:
@@ -56,6 +61,7 @@ def imprimir_promedios(promedios, categorias):
             print(f"{categorias[i]}: {promedio:.2f} juegos vendidos en promedio Anual.")
         except ValueError:
             print(f"Error: El valor '{promedios[i]}' no es un número válido.")
+
 
 
 def guardar_promedios(ruta_archivo, categorias, promedios):
@@ -107,3 +113,36 @@ def imprimir_matriz_de_archivo(ruta_archivo):
     except IOError:
         print("Error al intentar leer el archivo. Por favor, verifica los permisos.")
 
+def guardar_matriz(matriz, categorias, mes):
+    mi_ruta = "datos/"
+    nombre_archivo = mi_ruta + "ventas_mes.csv"
+
+    try:
+        # Leer el archivo existente
+        datos_existentes = {}
+        try:
+            with open(nombre_archivo, 'r') as archivo:
+                for linea in archivo:
+                    partes = linea.strip().split("\t")
+                    categoria = partes[0]
+                    try:
+                        valores = list(map(int, partes[1:]))
+                        datos_existentes[categoria] = valores
+                    except ValueError:
+                        print(f"Advertencia: Se ignoró una línea no numérica: {linea}")
+        except FileNotFoundError:
+            print(f"Archivo no encontrado. Se creará un nuevo archivo en '{nombre_archivo}'.")
+
+        # Actualizar los datos existentes con los nuevos datos
+        for i in range(len(categorias)):
+            datos_existentes[categorias[i]] = matriz[i]
+
+        # Escribir los datos actualizados en el archivo
+        with open(nombre_archivo, 'w') as archivo:
+            for categoria, valores in datos_existentes.items():
+                archivo.write(f"{categoria}\t" + "\t".join(map(str, valores)) + "\n")
+
+        print(f"Matriz actualizada correctamente en '{nombre_archivo}'.")
+
+    except IOError:
+        print("Error al intentar guardar la matriz. Por favor, verifica los permisos o la ruta.")
