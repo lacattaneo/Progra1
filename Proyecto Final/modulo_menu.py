@@ -71,10 +71,11 @@ def menu(matriz_ventas, categorias_juegos, meses_del_anio, calendario_ventas):
 
         elif menu == 3:
             imprimir_matriz_de_archivo(mi_ruta)
-            promedios = calcular_promedio(mi_ruta)
+            promedios = calcular_promedio(mi_ruta, categorias_juegos)
             imprimir_promedios(promedios, categorias_juegos)
             guardar_promedios(mi_ruta, categorias_juegos, promedios)
             volver_inicio()
+
             
         elif menu == 4:
             eleccion_usuario = 'x'
@@ -85,10 +86,9 @@ def menu(matriz_ventas, categorias_juegos, meses_del_anio, calendario_ventas):
                 print(' ')
                 eleccion_usuario = input("Elige una opción: ")
                 
-            if eleccion_usuario == '1':  # Agregar una Venta
+            if eleccion_usuario == '1': # Agregar una Venta
                 agregar_venta(matriz_ventas, categorias_juegos, meses_del_anio, calendario_ventas)
-                guardar_matriz(matriz_ventas, categorias_juegos, meses_del_anio)  # Guardar la matriz cada vez que se agregan ventas
-                guardar_calendario(mi_ruta, calendario_ventas)
+                guardar_calendario(mi_ruta, calendario_ventas)  # Sólo guardar el calendario
                 volver_inicio()
             elif eleccion_usuario == '2':
                 continue  # Volver al menú principal

@@ -47,70 +47,69 @@ def agregar_venta(matriz, cate, mes, calendario):
         actualizar_ventas(calendario, mes_seleccionado, dia, cantidad)
         
         # Guardar ambos archivos
-        guardar_matriz(matriz, cate, mes)  # Guardar en ventas_mes.csv
+        guardar_matriz(matriz, cate, mes[mes_idx])  # Guardar en ventas_mes.csv
         guardar_calendario("datos/", calendario)  # Guardar en ventas_diarias.csv
         
         print(f"Se ha actualizado la categoría {cate[cat_idx]} para el mes {mes[mes_idx]} y día {dia} con {cantidad} juegos vendidos.")
         print()
 
-def guardar_matriz(matriz, categorias, mes):
+def guardar_matriz(matriz, categorias, meses):
     mi_ruta = "datos/"
     nombre_archivo = mi_ruta + "ventas_mes.csv"
 
     try:
-        # Leer el archivo existente
         datos_existentes = {}
         try:
-            with open(nombre_archivo, 'r') as archivo:
-                for linea in archivo:
-                    partes = linea.strip().split("\t")
-                    archivo_mes = partes[0]
-                    categoria = partes[1]
-                    try:
-                        valores = list(map(int, partes[2:]))
-                        if archivo_mes not in datos_existentes:
-                            datos_existentes[archivo_mes] = {}
-                        datos_existentes[archivo_mes][categoria] = valores
-                    except ValueError:
-                        print(f"Advertencia: Se ignoró una línea no numérica: {linea}")
+            # Cambié a 'utf-8-sig' para manejar el BOM o 'latin1' en caso de que no sea UTF-8 puro
+            with open(nombre_archivo, 'r', encoding='utf-8-sig') as archivo:
+                lineas = archivo.readlines()
+
+                for linea in lineas:
+                    partes = linea.strip().split(",")  # Usar coma para dividir
+                    if len(partes) < 2:  # Saltar líneas sin suficientes datos
+                        continue
+                    categoria = partes[0]
+                    if categoria in categorias:
+                        categoria_idx = categorias.index(categoria)
+                        ventas_actualizadas = partes[1:]
+
+                        if len(ventas_actualizadas) == len(meses):
+                            # Actualizamos la matriz con las ventas correspondientes
+                            matriz[categoria_idx] = [int(x) for x in ventas_actualizadas]
+                        else:
+                            print(f"Advertencia: Las ventas para {categoria} no coinciden con el número de meses.")
         except FileNotFoundError:
-            print(f"Archivo no encontrado. Se creará un nuevo archivo en '{nombre_archivo}'.")
+            print(f"Archivo no encontrado. Se creará uno nuevo en '{nombre_archivo}'.")
 
-        # Actualizar los datos existentes con los nuevos datos
-        if mes not in datos_existentes:
-            datos_existentes[mes] = {}
-        for i in range(len(categorias)):
-            datos_existentes[mes][categorias[i]] = matriz[i]
-
-        # Escribir los datos actualizados en el archivo
-        with open(nombre_archivo, 'w') as archivo:
-            for archivo_mes, categorias_data in datos_existentes.items():
-                for categoria, valores in categorias_data.items():
-                    archivo.write(f"{archivo_mes}\t{categoria}\t" + "\t".join(map(str, valores)) + "\n")
+        # Escribir los datos actualizados de la matriz en el archivo, sin modificar la cabecera
+        with open(nombre_archivo, 'w', encoding='utf-8-sig') as archivo:
+            # Mantener la cabecera original intacta
+            archivo.write("Categoría/Mes" + "," + ",".join(meses) + "\n")  # Usar coma como delimitador
+            
+            # Escribir las ventas actualizadas para cada categoría
+            for i, categoria in enumerate(categorias):
+                archivo.write(categoria + "," + ",".join(map(str, matriz[i])) + "\n")  # Usar coma como delimitador
 
         print(f"Matriz actualizada correctamente en '{nombre_archivo}'.")
 
-    except Exception as e:
-        print(f"Se produjo un error: {e}")
-
+    except FileNotFoundError:
+        print(f"No se encontró el archivo: {nombre_archivo}. Por favor, verifica la ruta.")
+    except IOError:
+        print(f"Se produjo un error al intentar acceder o modificar el archivo: {nombre_archivo}.")
 
 def guardar_calendario(ruta_archivo, calendario):
     nombre_archivo = ruta_archivo + "ventas_diarias.csv"
     try:
-        with open(nombre_archivo, 'a') as archivo:  # Abrir en modo 'a' para agregar
-            # Escribir el encabezado solo si el archivo está vacío
-            archivo.write("Mes\tDía\tVentas\n")
-            
-            # Escribir los datos del calendario
+        with open(nombre_archivo, 'w') as archivo:  # Abrir en modo 'w' para reescribir
+            archivo.write("Mes,Día,Ventas\n")  # Escribir encabezado
             for mes, dias in calendario.items():
                 for dia, ventas in dias.items():
-                    archivo.write(f"{mes}\t{dia}\t{ventas}\n")
-        
+                    archivo.write(f"{mes},{dia},{ventas}\n")
         print(f"Calendario guardado exitosamente en {nombre_archivo}.")
+    except IOError:
+        print("Error al intentar guardar el calendario. Verifica los permisos.")
     except FileNotFoundError:
         print(f"No se encontró el archivo para guardar el calendario.")
-    except IOError:
-        print("Error al intentar guardar el calendario. Por favor, verifica los permisos.")
 
 def actualizar_ventas(calendario, mes, dia, cantidad):
     """Suma la cantidad de ventas al calendario evitando duplicados."""
@@ -131,23 +130,30 @@ def cargar_matriz(categorias, meses):
     matriz = [[0] * len(meses) for _ in range(len(categorias))]  # Inicializa la matriz con las dimensiones correctas
 
     try:
-        with open(nombre_archivo, 'r') as archivo:
+        # Usar 'utf-8-sig' o 'latin1' para leer el archivo con codificación permisiva
+        with open(nombre_archivo, 'r', encoding='utf-8-sig') as archivo:
             lines = archivo.readlines()
-            
-            # Verifica si hay líneas después del encabezado
-            for i, line in enumerate(lines[1:]):  # Saltamos el encabezado
-                # Evita que el índice se salga del rango
-                if i < len(categorias):
-                    values = line.strip().split("\t")[1:]  # Evitar la columna de categorías
-                    # Asignar los valores de las ventas, convirtiendo a int
-                    matriz[i] = [int(x) for x in values]
-                else:
-                    print(f"Advertencia: Línea extra en el archivo {nombre_archivo} en la posición {i+1}, no se asignará.")
-            
+
+            # Itera sobre las líneas del archivo (ignorando encabezados)
+            for i, line in enumerate(lines):
+                if i == 0:  # Si hay encabezados, los dejamos pasar
+                    continue
+
+                # Se espera que la primera columna sea la categoría y el resto los datos
+                values = line.strip().split(",")  # Usar coma como delimitador
+                categoria = values[0]
+                meses_ventas = values[1:]
+
+                # Verifica que la cantidad de datos coincida con los meses
+                if len(meses_ventas) == len(meses):
+                    categoria_index = categorias.index(categoria)  # Encuentra la posición de la categoría
+                    matriz[categoria_index] = [int(x) for x in meses_ventas]       
         print(f"Matriz cargada correctamente desde '{nombre_archivo}'.")
     except FileNotFoundError:
-        print(f"Archivo no encontrado. Inicializando la matriz con valores por defecto.")
+        print(f"Archivo no encontrado: {nombre_archivo}")
     except IOError:
-        print("Error al cargar la matriz")
-    
+        print("Error al cargar el archivo.")
+    except ValueError as e:
+        print(f"Error al procesar los datos: {e}")
+        
     return matriz

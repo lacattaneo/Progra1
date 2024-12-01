@@ -1,11 +1,11 @@
-Categor�a	Promedio de Ventas
-Accion	2.42 juegos vendidos en promedio.
-Aventu	1.92 juegos vendidos en promedio.
-RolRPG	2.00 juegos vendidos en promedio.
-Deport	2.67 juegos vendidos en promedio.
-Carrer	1.42 juegos vendidos en promedio.
-Estrat	1.50 juegos vendidos en promedio.
-Simula	2.42 juegos vendidos en promedio.
-Puzzle	1.75 juegos vendidos en promedio.
-Terror	1.67 juegos vendidos en promedio.
-MulMMO	1.92 juegos vendidos en promedio.
+﻿Categoría,Promedio de Ventas
+Accion,2.50 juegos vendidos en promedio.
+Aventu,1.92 juegos vendidos en promedio.
+RolRPG,2.00 juegos vendidos en promedio.
+Deport,2.67 juegos vendidos en promedio.
+Carrer,1.42 juegos vendidos en promedio.
+Estrat,1.50 juegos vendidos en promedio.
+Simula,2.42 juegos vendidos en promedio.
+Puzzle,1.75 juegos vendidos en promedio.
+Terror,1.67 juegos vendidos en promedio.
+MulMMO,1.92 juegos vendidos en promedio.
